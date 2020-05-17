@@ -1,9 +1,18 @@
 package com.example.reminderapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.media.AudioAttributes;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +22,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+
 import java.util.Calendar;
 
 public class DetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -21,9 +35,11 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
     private TextView startTimeHourTextView;
     private TextView endTimeDayTextView;
     private TextView endTimeHourTextView;
+    private TextView locationTextView;
 
     private Spinner frequencySpinner;
 
+    int PLACE_PICKER_REQUEST = 1;
     Calendar calendar;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
@@ -34,6 +50,7 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        createNotificationChannel("Emre's Birthday");
         setupView();
 
     }
@@ -45,6 +62,7 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
         startTimeHourTextView = findViewById(R.id.startTimeHourTextView);
         endTimeDayTextView = findViewById(R.id.endTimeDayTextView);
         endTimeHourTextView = findViewById(R.id.endTimeHourTextView);
+        locationTextView = findViewById(R.id.locationTextView);
 
         // Spinner
         frequencySpinner = findViewById(R.id.frequencySpinner);
@@ -95,7 +113,65 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void selectLocationClicked(View view) {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(DetailActivity.this), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void addUpdateClicked(View view) {
+        Intent intent = new Intent(DetailActivity.this, ReminderBroadcast.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(DetailActivity.this, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + 5000,
+                1,
+                pendingIntent);
+    }
+
+    private void createNotificationChannel(String title){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = title;
+            String description = "Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notify", name, importance);
+            channel.setDescription(description);
+
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
+
+            channel.setSound(Uri.parse("android.resource://" + "com.example.reminderapp" + "/" + R.raw.swiftly), audioAttributes);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
+        }
+
+    }
+
+    // Google Maps
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(this, data);
+
+                String latitude = String.valueOf(place.getLatLng().latitude);
+                String longitude = String.valueOf(place.getLatLng().longitude);
+
+                locationTextView.setText(latitude + " , " + longitude);
+            }
+        }
     }
 
     // Frequency Adapter Funcs
@@ -109,5 +185,22 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    // DateTime Things
+    private int daySeconds() {
+        return 1000 * 60 * 60 * 24;
+    }
+
+    private int weekSeconds() {
+        return 1000 * 60 * 60 * 24 * 7;
+    }
+
+    private int monthSeconds() {
+        return 1000 * 60 * 60 * 24 * 30;
+    }
+
+    private int yearSeconds() {
+        return 1000 * 60 * 60 * 24 * 365;
     }
 }

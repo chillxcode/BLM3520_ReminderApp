@@ -203,7 +203,7 @@
         app:layout_constraintTop_toBottomOf="@+id/frequencySpinner" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/locationTextView"
         android:layout_width="0dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
@@ -228,7 +228,7 @@
         android:background="@drawable/ic_add_black"
         android:onClick="selectLocationClicked"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintStart_toEndOf="@+id/locationTextView"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <Button
@@ -238,9 +238,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:onClick="addUpdateClicked"
         android:text="ADD"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/locationTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
