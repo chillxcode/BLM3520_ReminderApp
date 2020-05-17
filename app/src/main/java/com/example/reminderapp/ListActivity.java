@@ -31,12 +31,19 @@ public class ListActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getApplicationContext(), DetailActivity.class));
-//                Toast.makeText(ListActivity.this,"Item Selected " + position,Toast.LENGTH_SHORT).show();
+                itemClicked(position);
             }
         });
 
         setupBottomNavBar();
+    }
+
+    void itemClicked(int i) {
+        Toast.makeText(ListActivity.this,"Item Selected " + i,Toast.LENGTH_SHORT).show();
+    }
+
+    public void addButtonClicked(View view) {
+        startActivity(new Intent(getApplicationContext(), DetailActivity.class));
     }
 
     void setupBottomNavBar () {
