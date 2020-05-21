@@ -7,7 +7,7 @@
     tools:context=".DetailActivity">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/descriptionTextView"
         android:layout_width="374dp"
         android:layout_height="80dp"
         android:layout_marginStart="16dp"
@@ -33,7 +33,7 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
     <TextView
         android:id="@+id/textView"
@@ -45,7 +45,7 @@
         android:text="Start Time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
 
     <TextView
         android:id="@+id/startTimeDayTextView"
@@ -82,7 +82,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:text="HH.MM.SS"
+        android:text="HH.MM"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/button2"
@@ -146,7 +146,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:text="HH.MM.SS"
+        android:text="HH.MM"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -234,7 +234,7 @@
     <Button
         android:id="@+id/button6"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -243,5 +243,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationTextView" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
